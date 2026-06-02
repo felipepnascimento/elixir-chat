@@ -36,12 +36,12 @@
 <% else %>
   <div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
     <div class="flex flex-col w-full max-w-2xl h-[90vh] bg-base-100 rounded-xl shadow-2xl overflow-hidden">
-      <div class="navbar border-b border-base-300 px-4">
+      <div class="navbar bg-accent text-accent-content px-4">
         <div class="flex-1">
-          <span class="text-xl font-bold">Elixir Chat</span>
+          <span class="text-xl font-bold tracking-wide">Elixir Chat</span>
         </div>
         <div class="flex-none">
-          <div class="badge badge-primary badge-lg">{@username}</div>
+          <div class="font-medium">{@username}</div>
         </div>
       </div>
 
@@ -50,13 +50,26 @@
         class="flex-1 overflow-y-auto p-4 space-y-2"
         phx-hook="ScrollBottom"
       >
+        <script :type={Phoenix.LiveView.ColocatedHook} name=".MsgUsername">
+          export default {
+            mounted() {
+              const colors = [
+                "badge-primary", "badge-secondary", "badge-accent",
+                "badge-info", "badge-success", "badge-warning", "badge-error"
+              ]
+              const name = this.el.textContent.trim().replace(/^🤖\s*/, "")
+              const hash = name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
+              this.el.classList.add("badge", "badge-sm", colors[hash % colors.length])
+            }
+          }
+        </script>
         <%= for msg <- @messages do %>
           <div class={["chat", if(msg.username == @username, do: "chat-end", else: "chat-start")]}>
-            <div class="chat-header opacity-60 text-xs mb-1">
+            <div class="chat-header mb-1">
               <%= if msg.is_agent do %>
-                🤖 {msg.username}
+                <span id={"u-#{msg.id}"} phx-hook=".MsgUsername">🤖 {msg.username}</span>
               <% else %>
-                {msg.username}
+                <span id={"u-#{msg.id}"} phx-hook=".MsgUsername">{msg.username}</span>
               <% end %>
             </div>
             <div class={[
@@ -74,8 +87,9 @@
       </div>
 
       <div class="p-4 border-t border-base-300">
-        <.form for={@message_form} phx-submit="send_message" class="flex gap-2">
+        <.form for={@message_form} id="message-form" phx-submit="send_message" phx-hook=".ClearOnSubmit" class="flex gap-2">
           <input
+            id="message-body"
             type="text"
             name="body"
             value={@message_form["body"].value}
@@ -89,6 +103,16 @@
             </svg>
           </button>
         </.form>
+        <script :type={Phoenix.LiveView.ColocatedHook} name=".ClearOnSubmit">
+          export default {
+            mounted() {
+              this.el.addEventListener("submit", () => {
+                const input = this.el.querySelector("input[name='body']")
+                if (input) requestAnimationFrame(() => { input.value = ""; input.focus() })
+              })
+            }
+          }
+        </script>
       </div>
     </div>
   </div>
