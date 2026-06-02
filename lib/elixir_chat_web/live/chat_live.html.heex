@@ -4,16 +4,30 @@
       <div class="card-body">
         <h2 class="card-title text-2xl font-bold mb-4">Elixir Chat</h2>
         <form phx-submit="set_username">
-          <div class="form-control gap-3">
+          <div class="form-control gap-6">
             <input
+              id="username-input"
               type="text"
               name="username"
               placeholder="Your name..."
               class="input input-bordered w-full"
+              phx-hook=".UsernameInput"
               autofocus
               required
             />
-            <button type="submit" class="btn btn-primary w-full">Join</button>
+            <button id="join-btn" type="submit" class="btn btn-primary w-full mt-2">Join</button>
+            <script :type={Phoenix.LiveView.ColocatedHook} name=".UsernameInput">
+              export default {
+                mounted() {
+                  this.el.addEventListener("keydown", e => {
+                    if (e.key === "Enter") {
+                      e.preventDefault()
+                      this.el.closest("form").requestSubmit()
+                    }
+                  })
+                }
+              }
+            </script>
           </div>
         </form>
       </div>

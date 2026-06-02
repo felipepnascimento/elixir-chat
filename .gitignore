@@ -35,3 +35,28 @@ elixir_chat-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# SQLite database files (generated at runtime, not source code).
+/priv/repo/*.db
+/priv/repo/*.db-shm
+/priv/repo/*.db-wal
+
+# Environment variables — never commit secrets.
+.env
+.env.*
+!.env.example
+
+# Editor and OS artifacts.
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test coverage output.
+/cover/
+
+# Dialyzer PLT files.
+/priv/plts/
+*.plt
+*.plt.hash
+
