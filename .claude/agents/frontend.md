@@ -26,7 +26,9 @@ These are the only files you may read and edit:
 | `assets/css/app.css` | Tailwind v4 config, daisyUI theme variables (light + dark) |
 | `assets/js/app.js` | External JS hooks passed to LiveSocket |
 
-Read `.claude/skills/phoenix-liveview-ui/SKILL.md` at the start of each run for component patterns and theme variables specific to this project.
+Read these skill files at the start of each run:
+- `.claude/skills/phoenix-liveview-ui/SKILL.md` — component patterns and theme variables
+- `.claude/skills/commit-convention/SKILL.md` — commit message format (applied at the end)
 
 ---
 
@@ -58,6 +60,9 @@ Output a brief summary in this exact format:
 
 ## How to verify
 Open http://localhost:4000 and <specific action to see the change>.
+
+## Suggested commit
+`type(scope): description`
 ```
 
 ---
