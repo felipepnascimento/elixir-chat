@@ -34,60 +34,62 @@
     </div>
   </div>
 <% else %>
-  <div class="flex flex-col h-screen bg-base-200">
-    <div class="navbar bg-base-100 shadow px-4">
-      <div class="flex-1">
-        <span class="text-xl font-bold">Elixir Chat</span>
-      </div>
-      <div class="flex-none">
-        <div class="badge badge-primary badge-lg"><%= @username %></div>
-      </div>
-    </div>
-
-    <div
-      id="messages"
-      class="flex-1 overflow-y-auto p-4 space-y-2"
-      phx-hook="ScrollBottom"
-    >
-      <%= for msg <- @messages do %>
-        <div class={["chat", if(msg.username == @username, do: "chat-end", else: "chat-start")]}>
-          <div class="chat-header opacity-60 text-xs mb-1">
-            <%= if msg.is_agent do %>
-              🤖 <%= msg.username %>
-            <% else %>
-              <%= msg.username %>
-            <% end %>
-          </div>
-          <div class={[
-            "chat-bubble",
-            if(msg.username == @username, do: "chat-bubble-primary", else: ""),
-            if(msg.is_agent, do: "chat-bubble-secondary", else: "")
-          ]}>
-            <%= msg.body %>
-          </div>
-          <div class="chat-footer opacity-40 text-xs mt-1">
-            <%= Calendar.strftime(msg.inserted_at, "%H:%M") %>
-          </div>
+  <div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
+    <div class="flex flex-col w-full max-w-2xl h-[90vh] bg-base-100 rounded-xl shadow-2xl overflow-hidden">
+      <div class="navbar border-b border-base-300 px-4">
+        <div class="flex-1">
+          <span class="text-xl font-bold">Elixir Chat</span>
         </div>
-      <% end %>
-    </div>
+        <div class="flex-none">
+          <div class="badge badge-primary badge-lg">{@username}</div>
+        </div>
+      </div>
 
-    <div class="p-4 bg-base-100 border-t border-base-300">
-      <.form for={@message_form} phx-submit="send_message" class="flex gap-2">
-        <input
-          type="text"
-          name="body"
-          value={@message_form["body"].value}
-          placeholder="Message..."
-          class="input input-bordered flex-1"
-          autofocus
-        />
-        <button type="submit" class="btn btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-          </svg>
-        </button>
-      </.form>
+      <div
+        id="messages"
+        class="flex-1 overflow-y-auto p-4 space-y-2"
+        phx-hook="ScrollBottom"
+      >
+        <%= for msg <- @messages do %>
+          <div class={["chat", if(msg.username == @username, do: "chat-end", else: "chat-start")]}>
+            <div class="chat-header opacity-60 text-xs mb-1">
+              <%= if msg.is_agent do %>
+                🤖 {msg.username}
+              <% else %>
+                {msg.username}
+              <% end %>
+            </div>
+            <div class={[
+              "chat-bubble",
+              if(msg.username == @username, do: "chat-bubble-primary", else: ""),
+              if(msg.is_agent, do: "chat-bubble-secondary", else: "")
+            ]}>
+              {msg.body}
+            </div>
+            <div class="chat-footer opacity-40 text-xs mt-1">
+              {Calendar.strftime(msg.inserted_at, "%H:%M")}
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="p-4 border-t border-base-300">
+        <.form for={@message_form} phx-submit="send_message" class="flex gap-2">
+          <input
+            type="text"
+            name="body"
+            value={@message_form["body"].value}
+            placeholder="Message..."
+            class="input input-bordered flex-1"
+            autofocus
+          />
+          <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+            </svg>
+          </button>
+        </.form>
+      </div>
     </div>
   </div>
 <% end %>
