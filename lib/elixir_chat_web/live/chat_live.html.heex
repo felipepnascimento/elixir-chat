@@ -50,26 +50,13 @@
         class="flex-1 overflow-y-auto p-4 space-y-2"
         phx-hook="ScrollBottom"
       >
-        <script :type={Phoenix.LiveView.ColocatedHook} name=".MsgUsername">
-          export default {
-            mounted() {
-              const colors = [
-                "badge-primary", "badge-secondary", "badge-accent",
-                "badge-info", "badge-success", "badge-warning", "badge-error"
-              ]
-              const name = this.el.textContent.trim().replace(/^🤖\s*/, "")
-              const hash = name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
-              this.el.classList.add("badge", "badge-sm", colors[hash % colors.length])
-            }
-          }
-        </script>
         <%= for msg <- @messages do %>
           <div class={["chat", if(msg.username == @username, do: "chat-end", else: "chat-start")]}>
-            <div class="chat-header mb-1">
+            <div class="chat-header mb-1 text-sm font-semibold">
               <%= if msg.is_agent do %>
-                <span id={"u-#{msg.id}"} phx-hook=".MsgUsername">🤖 {msg.username}</span>
+                🤖 {msg.username}
               <% else %>
-                <span id={"u-#{msg.id}"} phx-hook=".MsgUsername">{msg.username}</span>
+                {msg.username}
               <% end %>
             </div>
             <div class={[
