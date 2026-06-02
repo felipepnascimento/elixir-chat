@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+      - deps:/app/deps
+      - build:/app/_build
+      - node_modules:/app/assets/node_modules
+    environment:
+      - MIX_ENV=dev
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    command: mix phx.server
+
+volumes:
+  deps:
+  build:
+  node_modules:
